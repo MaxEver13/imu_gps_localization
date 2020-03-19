@@ -3,6 +3,9 @@ project(imu_gps_localization)
 
 add_compile_options(-std=c++14)
 
+## System dependencies are found with CMake's conventions
+find_package(Eigen3 REQUIRED PATHS /usr/include/eigen3)
+
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -16,8 +19,8 @@ add_subdirectory(imu_gps_localizer)
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
-  imu_gps_localizer/include
-  ros_wrapper/include
+  ${PROJECT_SOURCE_DIR}/imu_gps_localizer/include
+  ${PROJECT_SOURCE_DIR}/ros_wrapper/include
 )
 
 add_library(ros_wrapper_lib
