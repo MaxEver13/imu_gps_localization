@@ -54,3 +54,4 @@ sudo apt-get install ros-kinetic-gps-common
 
 4.至此程序就可以跑起来了，附上轨迹图：
 
+![1584690063416](/home/max/.config/Typora/typora-user-images/1584690063416.png)
