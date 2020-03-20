@@ -47,7 +47,7 @@ LocalizationWrapper::~LocalizationWrapper() {
 }
 
 void LocalizationWrapper::ImuCallback(const sensor_msgs::ImuConstPtr& imu_msg_ptr) {
-    ImuGpsLocalization::ImuDataPtr imu_data_ptr = std::make_shared<ImuGpsLocalization::ImuData>();
+    ImuGpsLocalization::ImuDataPtr imu_data_ptr(new ImuGpsLocalization::ImuData());
     imu_data_ptr->timestamp = imu_msg_ptr->header.stamp.toSec();
     imu_data_ptr->acc << imu_msg_ptr->linear_acceleration.x, 
                          imu_msg_ptr->linear_acceleration.y,
@@ -76,8 +76,8 @@ void LocalizationWrapper::GpsPositionCallback(const sensor_msgs::NavSatFixConstP
         LOG(WARNING) << "[GpsCallBack]: Bad gps message!";
         return;
     }
-
-    ImuGpsLocalization::GpsPositionDataPtr gps_data_ptr = std::make_shared<ImuGpsLocalization::GpsPositionData>();
+    
+    ImuGpsLocalization::GpsPositionDataPtr gps_data_ptr(new ImuGpsLocalization::GpsPositionData());
     gps_data_ptr->timestamp = gps_msg_ptr->header.stamp.toSec();
     gps_data_ptr->lla << gps_msg_ptr->latitude,
                          gps_msg_ptr->longitude,
@@ -89,8 +89,8 @@ void LocalizationWrapper::GpsPositionCallback(const sensor_msgs::NavSatFixConstP
     LogGps(gps_data_ptr);
 }
 
-void LocalizationWrapper::GpsVelocityCallback(const geometry_msgs::TwistStampedConstPtr& gps_vel_msg_ptr) {
-    ImuGpsLocalization::GpsVelocityDataPtr gps_data_ptr = std::make_shared<ImuGpsLocalization::GpsVelocityData>();
+void LocalizationWrapper::GpsVelocityCallback(const geometry_msgs::TwistStampedConstPtr& gps_vel_msg_ptr) {    
+    ImuGpsLocalization::GpsVelocityDataPtr gps_data_ptr(new ImuGpsLocalization::GpsVelocityData());
     gps_data_ptr->timestamp = gps_vel_msg_ptr->header.stamp.toSec();
     gps_data_ptr->vel(0) = gps_vel_msg_ptr->twist.linear.x;
     gps_data_ptr->vel(1) = gps_vel_msg_ptr->twist.linear.y;

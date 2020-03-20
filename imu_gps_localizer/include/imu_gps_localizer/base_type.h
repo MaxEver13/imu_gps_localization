@@ -6,6 +6,8 @@
 namespace ImuGpsLocalization {
 
 struct ImuData {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW // memory align
+
     double timestamp;      // In second.
 
     Eigen::Vector3d acc;   // Acceleration in m/s^2
@@ -14,6 +16,8 @@ struct ImuData {
 using ImuDataPtr = std::shared_ptr<ImuData>;
 
 struct GpsPositionData {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     double timestamp;     // In second.
  
     Eigen::Vector3d lla;  // Latitude in degree, longitude in degree, and altitude in meter.
@@ -22,6 +26,8 @@ struct GpsPositionData {
 using GpsPositionDataPtr = std::shared_ptr<GpsPositionData>;
 
 struct GpsVelocityData {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     double timestamp;
 
     Eigen::Vector3d vel;
@@ -30,6 +36,8 @@ struct GpsVelocityData {
 using GpsVelocityDataPtr = std::shared_ptr<GpsVelocityData>;
 
 struct State {
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+
     double timestamp;
     
     Eigen::Vector3d lla;       // WGS84 position.
