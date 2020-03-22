@@ -13,6 +13,8 @@ public:
     void Predict(const ImuDataPtr last_imu, const ImuDataPtr cur_imu, State* state);
 
 private:
+    void PredictNewState(const double& dt, const Eigen::Vector3d& gyro, const Eigen::Vector3d& acc,
+                                                                        State* state);
     const double acc_noise_;
     const double gyro_noise_;
     const double acc_bias_noise_;

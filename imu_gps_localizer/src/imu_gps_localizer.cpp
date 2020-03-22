@@ -34,6 +34,8 @@ bool ImuGpsLocalizer::ProcessImuData(const ImuDataPtr imu_data_ptr, State* fused
 
 bool ImuGpsLocalizer::ProcessGpsPositionData(const GpsPositionDataPtr gps_data_ptr) {
     if (!initialized_) {
+        // IMU data and gps velocity are already. 
+        // Initialized system succeed(initial system state and cov).
         if (!initializer_->AddGpsPositionData(gps_data_ptr, &state_)) {
             return false;
         }

@@ -71,7 +71,7 @@ void LocalizationWrapper::ImuCallback(const sensor_msgs::ImuConstPtr& imu_msg_pt
 }
 
 void LocalizationWrapper::GpsPositionCallback(const sensor_msgs::NavSatFixConstPtr& gps_msg_ptr) {
-    // Check the gps_status.
+    // Check the gps_status. 2 means that with ground-based augmentation.
     if (gps_msg_ptr->status.status != 2) {
         LOG(WARNING) << "[GpsCallBack]: Bad gps message!";
         return;
