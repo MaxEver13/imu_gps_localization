@@ -62,7 +62,7 @@ void GpsProcessor::ComputeJacobianAndResidual(const Eigen::Vector3d& init_lla,
     // Compute jacobian.
     jacobian->setZero();
     jacobian->block<3, 3>(0, 0)  = Eigen::Matrix3d::Identity();
-    jacobian->block<3, 3>(0, 6)  = - G_R_I * GetSkewMatrix(I_p_Gps_);
+    jacobian->block<3, 3>(0, 6)  = - G_R_I * skewSymmetric(I_p_Gps_);
 }
 
 void GpsProcessor::ComputeJacobianAndResidual(const Eigen::Vector3d& init_lla,  
@@ -75,13 +75,13 @@ void GpsProcessor::ComputeJacobianAndResidual(const Eigen::Vector3d& init_lla,
     const Eigen::Vector3d gyro_unbias = state.imu_data_ptr->gyro - state.gyro_bias;
 
     // Compute residual.
-    *residual = gps_data->vel - (G_v_I + G_R_I * GetSkewMatrix(gyro_unbias) * I_p_Gps_);
+    *residual = gps_data->vel - (G_v_I + G_R_I * skewSymmetric(gyro_unbias) * I_p_Gps_);
 
     // Compute jacobian.
     jacobian->setZero();
     jacobian->block<3, 3>(0, 3)  = Eigen::Matrix3d::Identity();
-    jacobian->block<3, 3>(0, 6)  = - G_R_I * GetSkewMatrix(GetSkewMatrix(gyro_unbias) * I_p_Gps_);
-    jacobian->block<3, 3>(0, 12)  = - G_R_I * GetSkewMatrix(I_p_Gps_);
+    jacobian->block<3, 3>(0, 6)  = - G_R_I * skewSymmetric(skewSymmetric(gyro_unbias) * I_p_Gps_);
+    jacobian->block<3, 3>(0, 12)  = - G_R_I * skewSymmetric(I_p_Gps_);
 }
 
 void AddDeltaToState(const Eigen::Matrix<double, 15, 1>& delta_x, State* state) {

@@ -8,6 +8,8 @@ namespace ImuGpsLocalization {
 constexpr double kDegreeToRadian = M_PI / 180.;
 constexpr double kRadianToDegree = 180. / M_PI;
 
+// GNSS坐标转换
+// reference: https://www.cnblogs.com/langzou/p/11388520.html
 inline void ConvertLLAToENU(const Eigen::Vector3d& init_lla, 
                             const Eigen::Vector3d& point_lla, 
                             Eigen::Vector3d* point_enu) {
@@ -26,14 +28,6 @@ inline void ConvertENUToLLA(const Eigen::Vector3d& init_lla,
                             point_lla->data()[0], point_lla->data()[1], point_lla->data()[2]);                            
 }
 
-inline Eigen::Matrix3d GetSkewMatrix(const Eigen::Vector3d& v) {
-    Eigen::Matrix3d w;
-    w << 0.,    -v(2), v(1),
-         v(2),  0.,    -v(0),
-         -v(1), v(0),  0.;
-
-    return w;
-}
 
 /*
  *  @brief Create a skew-symmetric matrix from a 3-element vector.

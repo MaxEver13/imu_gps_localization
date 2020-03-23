@@ -117,7 +117,7 @@ void ImuProcessor::Predict(const ImuDataPtr last_imu, const ImuDataPtr cur_imu, 
     // Covariance of the error-state.   
     Eigen::Matrix<double, 15, 15> Fx = Eigen::Matrix<double, 15, 15>::Identity();
     Fx.block<3, 3>(0, 3)   = Eigen::Matrix3d::Identity() * delta_t;
-    Fx.block<3, 3>(3, 6)   = - state->G_R_I * GetSkewMatrix(acc_unbias) * delta_t;
+    Fx.block<3, 3>(3, 6)   = - state->G_R_I * skewSymmetric(acc_unbias) * delta_t;
     Fx.block<3, 3>(3, 9)   = - state->G_R_I * delta_t;
     Fx.block<3, 3>(6, 6)   = Eigen::AngleAxisd(delta_angle_axis.norm(), delta_angle_axis.normalized()).toRotationMatrix().transpose();
     Fx.block<3, 3>(6, 12)  = - Eigen::Matrix3d::Identity() * delta_t;
