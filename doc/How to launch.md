@@ -52,6 +52,16 @@ sudo apt-get install ros-kinetic-gps-common
 
 ![1584688837799](/home/max/.config/Typora/typora-user-images/1584688837799.png)
 
-4.至此程序就可以跑起来了，附上轨迹图：
+4.关于imu_gps_localization.launch 中imu和GNSS之间的外参，参考utbm_dataset_play.launch中的TF转换部分的内容：
+
+![1585809212281](/home/max/.config/Typora/typora-user-images/1585809212281.png)
+
+上面都是x,y,z,yaw,pitch,roll的表达形式，参考：
+
+![1585809319147](/home/max/.config/Typora/typora-user-images/1585809319147.png)
+
+可以看出，imu和GNSS坐标系完全重合，因此imu_gps_localization中的外参平移部分全部给０。
+
+５.至此程序就可以跑起来了，附上轨迹图：
 
 ![1584690063416](/home/max/.config/Typora/typora-user-images/1584690063416.png)
