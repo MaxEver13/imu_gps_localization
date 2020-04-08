@@ -1,6 +1,7 @@
 #include "imu_gps_localizer.h"
 #include "utils.h"
 
+#include <iostream>
 #include <glog/logging.h>
 
 
@@ -18,6 +19,7 @@ ImuGpsLocalizer::ImuGpsLocalizer(const double acc_noise, const double gyro_noise
 }
 
 bool ImuGpsLocalizer::ProcessImuData(const ImuDataPtr imu_data_ptr, State* fused_state) {
+  std::cout << "[ProcessImuData] timestamp: " << std::fixed << imu_data_ptr->timestamp << std::endl;
   if (!initialized_) {
     initializer_->AddImuData(imu_data_ptr);
     return false;
@@ -33,6 +35,7 @@ bool ImuGpsLocalizer::ProcessImuData(const ImuDataPtr imu_data_ptr, State* fused
 }
 
 bool ImuGpsLocalizer::ProcessGnssData(const GnssDataPtr gnss_data_ptr) {
+  std::cout << "[ProcessGnssData] timestamp: " << std::fixed << gnss_data_ptr->timestamp << std::endl;
   if (!initialized_) {
     // IMU data and velocity data are ready. 
     // Initialized system succeed(initial system state and cov).
@@ -56,10 +59,12 @@ bool ImuGpsLocalizer::ProcessGnssData(const GnssDataPtr gnss_data_ptr) {
 }
 
 bool ImuGpsLocalizer::ProcessVelData(const VelocityDataPtr vel_data_ptr) {
-  if (vel_data_ptr->vel.norm() < kGpsVelLimit) {
-    return false;
-  }
+  std::cout << "[ProcessVelData] timestamp: " << std::fixed << vel_data_ptr->timestamp << std::endl;
 
+  // if (vel_data_ptr->vel.norm() < kGpsVelLimit) {
+  //   return false;
+  // }
+  
   if (!initialized_) {
     initializer_->AddVelData(vel_data_ptr);
     return false;

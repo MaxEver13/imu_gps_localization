@@ -20,22 +20,22 @@ void Initializer::AddVelData(const VelocityDataPtr vel_data_ptr) {
 
 bool Initializer::AddGnssData(const GnssDataPtr gnss_data_ptr, State* state) {
   // 如果imu数据太少，下面初始化的时候不能很好地设置pitch和roll
-  if (imu_buffer_.size() < kImuDataBufferLength) {
-    LOG(WARNING) << "[AddGnssData]: No enough imu data!";
-    return false;
-  }
+  // if (imu_buffer_.size() < kImuDataBufferLength) {
+  //   LOG(WARNING) << "[AddGnssData]: No enough imu data!";
+  //   return false;
+  // }
 
-  // 当imu数据足够且vel数据都有时，才初始化系统
-  if (vel_buffer_.size() == 0)
+  // 当imu数据且vel数据都有时，才初始化系统
+  if (vel_buffer_.size() == 0 || imu_buffer_.size() == 0)
     return false;
 
   // 最新的imu和vel数据
-  ImuDataPtr latest_imu_data = imu_buffer_.back();
-  VelocityDataPtr latest_vel_data = vel_buffer_.back();
+  // ImuDataPtr latest_imu_data = imu_buffer_.back();
+  // VelocityDataPtr latest_vel_data = vel_buffer_.back();
 
   // 设置初始状态时间戳和imu数据
   state->timestamp = gnss_data_ptr->timestamp;
-  state->imu_data_ptr = latest_imu_data;
+  state->imu_data_ptr = imu_buffer_.front();
 
   // Set initial mean.
   state->G_p_I.setZero();
@@ -45,13 +45,16 @@ bool Initializer::AddGnssData(const GnssDataPtr gnss_data_ptr, State* state) {
   // We can use the direction of gravity to set roll and pitch. 
   // But, we cannot set the yaw. 
   // So, we set yaw to zero and give it a big covariance.
-  if (!ComputeG_R_IFromImuData(&state->G_R_I)) {
-    LOG(WARNING) << "[AddGpsPositionData]: Failed to compute G_R_I!";
-    return false;
-  }
+  // if (!ComputeG_R_IFromImuData(&state->G_R_I)) {
+  //   LOG(WARNING) << "[AddGpsPositionData]: Failed to compute G_R_I!";
+  //   return false;
+  // }
 
-  const double yaw = std::atan2(latest_vel_data->vel(1), latest_vel_data->vel(0));
-  state->G_R_I = Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()).toRotationMatrix() * state->G_R_I.eval();
+  // const double yaw = std::atan2(latest_vel_data->vel(1), latest_vel_data->vel(0));
+  // state->G_R_I = Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()).toRotationMatrix() * state->G_R_I.eval();
+
+  // 设置为单位阵
+  state->G_R_I = Eigen::Matrix3d::Identity();
 
   // Set bias to zero.
   state->acc_bias.setZero();
