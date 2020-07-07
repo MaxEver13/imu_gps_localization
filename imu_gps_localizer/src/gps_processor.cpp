@@ -90,10 +90,13 @@ void GpsProcessor::ComputeJacobianAndResidual(const Eigen::Vector3d& init_lla,
 
 void GpsProcessor::AddDeltaToState(const Eigen::Matrix<double, 15, 1>& delta_x, State* state) {
   state->G_p_I     += delta_x.block<3, 1>(0, 0);
-  state->G_v_I     += delta_x.block<3, 1>(3, 0);
-  state->G_R_I     *= Eigen::AngleAxisd(delta_x.block<3, 1>(6, 0).norm(), delta_x.block<3, 1>(6, 0).normalized()).toRotationMatrix();
+  state->G_v_I     += delta_x.block<3, 1>(3, 0);  
   state->acc_bias  += delta_x.block<3, 1>(9, 0);
   state->gyro_bias += delta_x.block<3, 1>(12, 0);
+
+  if (delta_x.block<3, 1>(6, 0).norm() > 1e-12) {
+    state->G_R_I     *= Eigen::AngleAxisd(delta_x.block<3, 1>(6, 0).norm(), delta_x.block<3, 1>(6, 0).normalized()).toRotationMatrix();
+  }
 }
 
 } 
